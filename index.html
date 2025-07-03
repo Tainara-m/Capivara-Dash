@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Capivara Dash</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.2/addons/p5.sound.min.js"></script>
+  <script src="script.js" defer></script>
+</head>
+<body class="inicio">
+  
+  <!-- Tela de Início -->
+  <div id="start-screen">
+    <img src="assets/capivara-icon.png" alt="Capivara" class="icone-capivara">
+    <h1 id="game-title">Capivara Dash</h1>
+    <p>Use as setas ← e → para mover a capivara.<br>
+       Pegue o capim para ganhar pontos.<br>
+       Evite as pedras para não perder vidas.<br>
+       Você tem 3 vidas. Boa sorte!</p>
+  
+    <!-- Seletor de tema -->
+    <div id="theme-selector" style="margin-bottom: 16px; text-align: center;">
+      <label for="tema" style="font-weight: bold; margin-right: 8px;">Tema:</label>
+      <select id="tema">
+        <option value="padrao">Padrão</option>
+        <option value="noturno">Noturno</option>
+        <option value="floresta">Chuva</option>
+      </select>
+    </div>
+
+    <button onclick="startGame()" style="padding: 10px 32px; border-radius: 8px; border: none; background: #014701; color: #63f536; font-size: 1.2em; font-family: 'Luckiest Guy'; font-weight: bold; cursor: pointer;">
+      Jogar
+    </button>
+  </div>
+
+  <!-- Interface do Jogo -->
+  <div class="container1" id="game-ui" style="display: none;">
+    <!-- Título lateral esquerdo -->
+     <header class="header-teclas" id="game-header">
+  ← Mover &nbsp; | &nbsp; → Mover &nbsp; | &nbsp; P Pausar &nbsp; | &nbsp; M Mutar Som
+</header>
+    <div id="left-bar">
+      <span style="transform: rotate(0deg); display: inline-block;">CAPIVARA DASH</span>
+    </div>
+
+    <!-- Canvas do jogo -->
+    <div id="game-canvas"></div>
+
+    <!-- HUD lateral direita -->
+    <div id="right-bar">
+      <div><strong>Pontos:</strong> <span id="hud-score"><br>0</span></div>
+      <div><strong>Fase:</strong> <span id="hud-fase"><br>1</span></div>
+      <div><strong>Melhor Pontuação:</strong> <span id="hud-best"><br>0</span></div>
+</button>
+      <div id="pause-container">
+  <label class="switch">
+    <input type="checkbox" id="pause-toggle">
+    <span class="slider">
+      <span class="slider-text" id="pause-status">Jogando</span>
+    </span>
+  </label>
+</div>
+  <button id="mute-button" onclick="toggleMute()" title="Desligar som">
+  <i id="mute-icon" class="fa-solid fa-volume-high"></i>
+</button>
+    </div>
+  </div>,
+
+  <!-- Tela de Game Over -->
+  <div id="game-over-popup" style="display: none;">
+    <h2>Game Over!</h2>
+    <p>Sua pontuação: <span id="final-score">0</span></p>
+    <button onclick="restartGame()">Jogar Novamente</button>
+  </div>
+<footer class="footer">
+    <p>&copy; 2025 Tainara Martins. Todos os direitos reservados.</p>
+</footer>
+</body>
+</html>

@@ -1,0 +1,331 @@
+/* Reset e corpo */
+body {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #fd7a00;
+  font-family: sans-serif;
+}
+
+.icone-capivara {
+  width: 220px;
+  height: 150px;
+  margin-bottom: 0px;
+}
+
+.header-teclas {
+  color: rgb(197, 73, 16);
+  text-align: center;
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 14px;
+  position: fixed;
+  width: 100%;
+  padding: 4px 0;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  display: none;
+}
+
+/* Tela de início */
+#start-screen {
+  text-align: center;
+  background-color: #00ff08;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  position: absolute;
+  z-index: 10;
+}
+
+#start-screen h1 {
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 64px;
+  color: #1b6306;
+  text-shadow: 2px 2px #000;
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+#start-screen button {
+  padding: 10px 20px;
+  font-size: 30px;
+  background-color: #ff9100;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.4);
+  color:#ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Luckiest Guy', cursive;
+}
+
+#start-screen button:hover {
+  background-color: #45a049;
+}
+
+/* Layout principal com HUD e título */
+.container1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Título lateral esquerdo */
+#left-bar {
+  width: 100px;
+  height: 500px;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  background: rgba(110, 236, 7, 0.4);
+  border: 2px solid rgba(110, 236, 7);
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(110, 236, 7, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  font-family: 'Luckiest Guy', cursive;
+  color:#ffffff;
+}
+
+/* Área lateral direita com placar */
+#right-bar {
+  width: 160px;
+  height: 500px;
+  background: rgba(110, 236, 7, 0.4);
+  padding: 20px;
+  font-family: sans-serif;
+  font-size: 15px;
+  border: 2px solid rgba(110, 236, 7);
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(110, 236, 7, 0.4);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 10px;
+  color:#ffffff;
+  align-items: center;
+}
+
+/* Canvas do jogo */
+canvas {
+  background-image: url('assets/fundo.jpeg');
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(110, 236, 7, 0.4);
+  display: block; /* importante para garantir que o canvas apareça */
+}
+
+/* Oculta elementos inicialmente */
+#game-ui, #game-over-popup {
+  display: flex;
+  gap: 20px;
+}
+
+/* Popup de Game Over */
+#game-over-popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fc9802;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(110, 236, 7, 0.4);
+  text-align: center;
+  z-index: 20;
+}
+
+#game-over-popup h2 {
+  margin-top: 0;
+  color: #4CAF50;
+  font-family: 'Luckiest Guy', cursive;
+}
+
+#game-over-popup button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  outline: none;
+}
+
+#game-over-popup button:hover {
+  background-color: #388e3c;
+}
+
+/* Título principal (caso use em outro lugar) */
+#game-title {
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 100px;
+  color: #ff5722;
+  text-shadow: 2px 2px #000;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#hud-score {
+  font-family: 'Luckiest Guy', cursive;
+  font-weight: bolder;
+  font-size: 30px;
+}
+
+#hud-fase {
+  font-family: 'Luckiest Guy', cursive;
+  font-weight: bolder;
+  font-size: 30px;
+}
+
+#right-bar{
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 20px;
+}
+
+#game-canvas {
+  width: 600px;
+  height: 500px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#game-canvas canvas {
+  display: block !important;
+}
+
+#game-canvas canvas,
+#game-ui {
+  opacity: 0;
+}
+
+#game-canvas.canvas-visible canvas,
+#game-ui.ui-visible {
+  opacity: 1;
+}
+
+#pause-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 20px;
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 18px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 150px;
+  height: 45px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0;
+  right: 0; bottom: 0;
+  background-color: #d11b1b;
+  transition: 0.4s;
+  border-radius: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 16px;
+  text-align: center;
+  padding: 0 10px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 32px;
+  width: 32px;
+  left: 5px;
+  bottom: 6px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+input:checked + .slider {
+  background-color: #4CAF50;
+}
+
+input:checked + .slider:before {
+  transform: translateX(105px);
+}
+
+#pause-status {
+  position: relative;
+  z-index: 3;
+}
+
+#mute-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 28px;
+  color: #1c9704;
+  transition: transform 0.2s, color 0.2s;
+}
+
+#mute-button:hover {
+  transform: scale(1.1);
+  color: #ffd700;
+}
+
+#theme-selector {
+  margin-top: 20px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 1.1em;
+  font-family: 'Luckiest Guy', cursive;
+}
+
+#theme-selector select {
+  padding: 8px 16px;
+  border: 2px solid #02810c;
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  background-color: transparent;
+  color: #ffffff;
+}
+
+
+
+.footer {
+  width: 100%;
+  color: rgb(197, 73, 16);
+  text-align: center;
+  padding: 10px 0;
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 14px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+}
