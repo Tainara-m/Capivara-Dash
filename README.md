@@ -42,3 +42,5 @@ CSS3 com fontes personalizadas
 LocalStorage para persistência de dados
 
 Organização modular do código (HTML, CSS e JS separados)
+
+Link para a página: https://tainara-m.github.io/Capivara-Dash/
