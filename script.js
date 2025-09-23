@@ -4,6 +4,7 @@ let capivara, comidaImg, ovoImg, fundoImg;
 let coracaoCheio, coracaoVazio;
 let comidinhas = [];
 let ovos = [];
+let vidasDrop = []; // <<< NOVO: array para vidas que caem
 let score = 0;
 let displayedScore = 0;
 let lives = 3;
@@ -22,13 +23,13 @@ let musicaFundo, somComida, somPerdeVida, somGameOver;
 
 let fundoPadrao, fundoNoturno, fundoFloresta;
 
-let comidaInterval, ovoInterval;
+let comidaInterval, ovoInterval, vidaInterval; // <<< NOVO inclui vidaInterval
 
 const MAX_WIDTH = 600;
 const MAX_HEIGHT = 500;
 
 function preload() {
-  capivara = loadImage('assets/capivara.png ');
+  capivara = loadImage('assets/capivara.png');
   comidaImg = loadImage('assets/comida.png');
   ovoImg = loadImage('assets/ovo.png');
   fundoPadrao = loadImage('assets/fundo.jpeg');
@@ -72,12 +73,12 @@ function draw() {
 
   image(capivara, capivaraX, capivaraY, 70, 70);
 
+  // --- Comida
   for (let i = comidinhas.length - 1; i >= 0; i--) {
     let comida = comidinhas[i];
     comida.y += velocidadeItens;
     image(comidaImg, comida.x, comida.y, 40, 40);
 
-    // Primeiro testa se pegou a comida
     if (collideRectRect(capivaraX, capivaraY, 70, 70, comida.x, comida.y, 40, 40)) {
       score += 10;
       comidinhas.splice(i, 1);
@@ -85,9 +86,7 @@ function draw() {
       updateFase();
       updateHUD();
       continue;
-    }
-    // Só testa se perdeu vida se NÃO pegou a comida
-    else if (comida.y > height) {
+    } else if (comida.y > height) {
       lives--;
       comidinhas.splice(i, 1);
       somPerdeVida.play();
@@ -96,6 +95,7 @@ function draw() {
     }
   }
 
+  // --- Ovos
   for (let i = ovos.length - 1; i >= 0; i--) {
     let ovo = ovos[i];
     ovo.y += velocidadeItens;
@@ -112,6 +112,24 @@ function draw() {
     }
   }
 
+  // --- Vidas extras (NOVO)
+  for (let i = vidasDrop.length - 1; i >= 0; i--) {
+    let vida = vidasDrop[i];
+    vida.y += velocidadeItens * 0.8; // cai mais devagar
+    image(coracaoCheio, vida.x, vida.y, 30, 30);
+
+    if (collideRectRect(capivaraX, capivaraY, 70, 70, vida.x, vida.y, 30, 30)) {
+      if (lives < 3) { // só ganha se não estiver cheio
+        lives++;
+        somComida.play();
+        updateHUD();
+      }
+      vidasDrop.splice(i, 1);
+    } else if (vida.y > height) {
+      vidasDrop.splice(i, 1);
+    }
+  }
+
   updatePlacarAnimado();
   drawVidasEstiloCoracao(20, 20);
 }
@@ -121,13 +139,6 @@ function updatePlacarAnimado() {
     displayedScore += 2;
     if (displayedScore > score) displayedScore = score;
   }
-}
-
-function drawPlacarEstiloRoleta(x, y) {
-  textSize(32);
-  fill(0);
-  textAlign(LEFT, TOP);
-  text(`Pontos: ${nf(displayedScore, 4)}`, x, y);
 }
 
 function drawVidasEstiloCoracao(x, y) {
@@ -158,17 +169,15 @@ function keyPressed() {
   }
 
   if (key === 'm' || key === 'M') {
-    
-      toggleMute();
-    }
+    toggleMute();
   }
+}
 
 let somMutado = false;
 
 function toggleMute() {
   somMutado = !somMutado;
 
-  // Mutar ou ativar o contexto de áudio
   if (somMutado) {
     getAudioContext().suspend();
   } else {
@@ -184,13 +193,6 @@ function toggleMute() {
       : 'fa-solid fa-volume-high';
     button.title = somMutado ? "Ligar som" : "Desligar som";
   }
-}
-
-function touchStarted() {
-  if (!gameStarted) return;
-  leftPressed = touches[0].x < width / 2;
-  rightPressed = !leftPressed;
-  return false;
 }
 
 function keyReleased() {
@@ -210,7 +212,7 @@ function touchStarted() {
       leftPressed = false;
     }
   }
-  return false; // previne scroll
+  return false;
 }
 
 function touchEnded() {
@@ -220,7 +222,6 @@ function touchEnded() {
 }
 
 function startGame() {
-  // Troca a classe do body
   document.body.classList.remove("inicio");
   document.body.classList.add("jogo");
 
@@ -228,7 +229,6 @@ function startGame() {
   document.getElementById('game-ui').style.display = 'flex';
   document.getElementById('game-over-popup').style.display = 'none';
 
-  // Aguarda um pequeno tempo para garantir que o display mudou antes de aplicar a classe
   setTimeout(() => {
     document.getElementById('game-ui').classList.add('ui-visible');
     document.getElementById('game-canvas').classList.add('canvas-visible');
@@ -250,27 +250,26 @@ function startGame() {
   capivaraY = height - 70;
   comidinhas = [];
   ovos = [];
+  vidasDrop = []; // reset vidas extras
 
-  // Limpa intervalos antigos se existirem
   clearInterval(comidaInterval);
   clearInterval(ovoInterval);
+  clearInterval(vidaInterval);
 
-  // Gera comida a cada 1.2 segundos
+  // comida
   comidaInterval = setInterval(() => {
     let newX = random(width - 40);
     let minDist = 100;
-    // Checa espaçamento mínimo entre comidinhas e ovos
     if (
       podeNascer(newX, comidinhas, minDist) &&
       podeNascer(newX, ovos, minDist) &&
       random() < 0.5
     ) {
-      // y inicial negativo para dar delay visual (opcional)
       comidinhas.push({ x: newX, y: -random(40, 120) });
     }
   }, 1200);
 
-  // Gera ovo a cada 2 segundos
+  // ovo
   ovoInterval = setInterval(() => {
     let newX = random(width - 40);
     let minDist = 100;
@@ -283,9 +282,17 @@ function startGame() {
     }
   }, 2000);
 
+  // vida extra (a cada 20s, com 20% de chance)
+  vidaInterval = setInterval(() => {
+    let newX = random(width - 40);
+    if (random() < 0.2) {
+      vidasDrop.push({ x: newX, y: -random(40, 120) });
+    }
+  }, 20000);
+
   loop();
   updateHUD();
-  trocarTema(); // <-- aplica o tema selecionado ao iniciar
+  trocarTema();
 }
 
 function restartGame() {
@@ -295,38 +302,32 @@ function restartGame() {
 function gameOver() {
   document.getElementById('game-header').style.display = 'none';
 
-  // Para o loop do p5.js e evita sobreposição
   noLoop();
   gameStarted = false;
 
-  // Limpa intervalos de spawn
   clearInterval(comidaInterval);
   clearInterval(ovoInterval);
+  clearInterval(vidaInterval);
 
-  // Limpa listas de itens
   comidinhas = [];
   ovos = [];
+  vidasDrop = [];
 
-  // Reseta controles
   leftPressed = false;
   rightPressed = false;
 
-  // Reseta posição da capivara
   capivaraX = width / 2 - 35;
   capivaraY = height - 70;
 
-  // Para sons
   if (musicaFundo && musicaFundo.isPlaying()) musicaFundo.stop();
   if (somGameOver) somGameOver.play();
 
-  // Salva melhor pontuação no localStorage
   let best = Number(localStorage.getItem('bestScore') || 0);
   if (score > best) {
     best = score;
     localStorage.setItem('bestScore', best);
   }
 
-  // Atualiza HUD e mostra popup
   updateHUD();
   document.getElementById('final-score').innerText = score;
   document.getElementById('game-over-popup').style.display = 'block';
@@ -335,7 +336,6 @@ function gameOver() {
 function updateHUD() {
   document.getElementById('hud-score').innerText = score;
   document.getElementById('hud-fase').innerText = fase;
-  // Atualiza melhor pontuação
   let best = Number(localStorage.getItem('bestScore') || 0);
   document.getElementById('hud-best').innerText = best;
 }
@@ -345,12 +345,10 @@ function collideRectRect(x1, y1, w1, h1, x2, y2, w2, h2) {
          y1 < y2 + h2 && y1 + h1 > y2;
 }
 
-// Função utilitária para checar espaçamento mínimo horizontal
 function podeNascer(xNovo, fila, minDist) {
   return !fila.some(item => Math.abs(item.x - xNovo) < minDist);
 }
 
-// Função para trocar tema
 function trocarTema() {
   const tema = document.getElementById('tema').value;
   const hud = document.getElementById('right-bar');
@@ -392,7 +390,7 @@ function togglePause() {
     toggle.checked = true;
   } else {
     loop();
-    status.innerText = "Rolando";
+    status.innerText = "Jogando";
     toggle.checked = false;
   }
 }
@@ -400,6 +398,10 @@ function togglePause() {
 function voltarParaInicio() {
   document.body.classList.remove("jogo");
   document.body.classList.add("inicio");
+
+  document.getElementById('start-screen').style.display = 'block';
+  document.getElementById('game-ui').style.display = 'none';
+  document.getElementById('game-over-popup').style.display = 'none';
 }
 
 window.onload = trocarTema;
