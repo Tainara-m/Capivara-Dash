@@ -29,7 +29,7 @@
     <!-- Seletor de tema -->
     <div id="theme-selector" style="margin-bottom: 16px; text-align: center;">
       <label for="tema" style="font-weight: bold; margin-right: 8px;">Tema:</label>
-      <select id="tema">
+      <select id="tema" onchange="trocarTema()">
         <option value="padrao">Padrão</option>
         <option value="noturno">Noturno</option>
         <option value="floresta">Chuva</option>
@@ -44,9 +44,10 @@
   <!-- Interface do Jogo -->
   <div class="container1" id="game-ui" style="display: none;">
     <!-- Título lateral esquerdo -->
-     <header class="header-teclas" id="game-header">
-  ← Mover &nbsp; | &nbsp; → Mover &nbsp; | &nbsp; P Pausar &nbsp; | &nbsp; M Mutar Som
-</header>
+    <header class="header-teclas" id="game-header">
+      ← Mover &nbsp; | &nbsp; → Mover &nbsp; | &nbsp; P Pausar &nbsp; | &nbsp; M Mutar Som
+    </header>
+
     <div id="left-bar">
       <span style="transform: rotate(0deg); display: inline-block;">CAPIVARA DASH</span>
     </div>
@@ -59,29 +60,32 @@
       <div><strong>Pontos:</strong> <span id="hud-score"><br>0</span></div>
       <div><strong>Fase:</strong> <span id="hud-fase"><br>1</span></div>
       <div><strong>Melhor Pontuação:</strong> <span id="hud-best"><br>0</span></div>
-</button>
+
       <div id="pause-container">
-  <label class="switch">
-    <input type="checkbox" id="pause-toggle">
-    <span class="slider">
-      <span class="slider-text" id="pause-status">Jogando</span>
-    </span>
-  </label>
-</div>
-  <button id="mute-button" onclick="toggleMute()" title="Desligar som">
-  <i id="mute-icon" class="fa-solid fa-volume-high"></i>
-</button>
+        <label class="switch">
+          <input type="checkbox" id="pause-toggle">
+          <span class="slider">
+            <span class="slider-text" id="pause-status">Jogando</span>
+          </span>
+        </label>
+      </div>
+
+      <button id="mute-button" onclick="toggleMute()" title="Desligar som">
+        <i id="mute-icon" class="fa-solid fa-volume-high"></i>
+      </button>
     </div>
-  </div>,
+  </div>
 
   <!-- Tela de Game Over -->
   <div id="game-over-popup" style="display: none;">
     <h2>Game Over!</h2>
     <p>Sua pontuação: <span id="final-score">0</span></p>
     <button onclick="restartGame()">Jogar Novamente</button>
+    <button onclick="voltarParaInicio()">Voltar ao Início</button>
   </div>
-<footer class="footer">
+
+  <footer class="footer">
     <p>&copy; 2025 Tainara Martins. Todos os direitos reservados.</p>
-</footer>
+  </footer>
 </body>
 </html>
